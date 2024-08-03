@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Chat</h2>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Users</h4>
+        <ul class="list-group">
+            {% for user in users %}
+            <li class="list-group-item">{{ user.username }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-8">
+        <h4>Messages</h4>
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message">
+                <strong>{{ message.sender_id == current_user.id and 'You' or 'User ' + str(message.sender_id) }}:</strong> {{ message.content }}
+            </div>
+            {% endfor %}
+        </div>
+        <form method="POST" action="{{ url_for('chat') }}">
+            <div class="form-group">
+                <label for="receiver">Select User:</label>
+                <select class="form-control" id="receiver" name="receiver" required>
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="content">Message:</label>
+                <input type="text" class="form-control" id="content" name="content" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
